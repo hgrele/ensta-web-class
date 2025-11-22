@@ -4,4 +4,3 @@ node_modules
 # local env files
 .env
 public
-context.md
