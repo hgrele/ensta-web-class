@@ -18,6 +18,7 @@ function App() {
       </div>
       <h1>My movies</h1>
       <div className="card">
+        <input type="text" placeholder="Search movies..." />
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
