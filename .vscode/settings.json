@@ -1,10 +1,15 @@
 {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
   "eslint.format.enable": true,
-  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
   "eslint.validate": [
     "javascript",
     "javascriptreact",
@@ -31,5 +36,5 @@
   },
   "[md]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
 }

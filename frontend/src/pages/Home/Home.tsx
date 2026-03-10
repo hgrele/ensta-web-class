@@ -1,9 +1,26 @@
 import './Home.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
 import reactLogo from '../../assets/react.svg'
+import { MovieCard } from '../../components/movie-card'
+import axios from 'axios'
+
+const API_KEY = import.meta.env.VITE_API_KEY
 
 function Home() {
   const [count, setCount] = useState(0)
+  const [movies, setMovies] = useState([])
+  useEffect(() => {
+    console.log('UseEffect')
+    axios
+      .get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}`)
+      .then(response => {
+        setMovies(
+          response.data.results.map((movieObjet: any) => movieObjet.title)
+        )
+      })
+  }, [])
+
   return (
     <>
       <div>
@@ -18,6 +35,9 @@ function Home() {
           count is {count}
         </button>
       </div>
+      {movies.map(title => (
+        <MovieCard title={title} />
+      ))}
     </>
   )
 }
