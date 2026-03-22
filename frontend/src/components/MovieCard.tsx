@@ -1,4 +1,4 @@
-import './Movie.css'
+import './MovieCard.css'
 
 type MovieProps = {
   title: string
@@ -6,7 +6,7 @@ type MovieProps = {
   imageRef: string
 }
 
-export const Movie = ({ title, releaseDate, imageRef }: MovieProps) => {
+export const MovieCard = ({ title, releaseDate, imageRef }: MovieProps) => {
   return (
     <div className="container">
       <h2>{title}</h2>

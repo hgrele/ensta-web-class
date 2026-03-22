@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Movie } from '../../components/Movie'
+import { MovieCard } from '../../components/MovieCard'
 import { useFetchMovies } from '../../hooks/useFetchMovies'
 import './Home.css'
 
@@ -28,7 +28,7 @@ function Home() {
         <div className="movies-container">
           {filteredMovies.length > 0 ? (
             filteredMovies.map(movie => (
-              <Movie
+              <MovieCard
                 key={movie.id}
                 title={movie.title}
                 releaseDate={movie.release_date}
