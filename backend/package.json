@@ -7,8 +7,8 @@
     "dev": "dotenv -- nodemon --experimental-modules ./server.js",
     "start": "dotenv -- node --experimental-modules ./server.js",
     "lint": "eslint . --fix",
-    "migration:generate": "dotenv -- typeorm --dataSource='./datasource.js' migration:generate --outputJs --pretty migrations/$npm_config_name",
-    "postmigration:generate": "./postmigration.sh",
+    "migration:generate": "dotenv -- node generate-migration.js",
+    "postmigration:generate": "node postmigration.js",
     "migration:run": "dotenv -- typeorm --dataSource='./datasource.js' migration:run",
     "migration:revert": "dotenv -- typeorm --dataSource='./datasource.js' migration:revert"
   },
