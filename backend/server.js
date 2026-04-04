@@ -1,7 +1,9 @@
 import cors from 'cors';
 import express from 'express';
 import logger from 'morgan';
+import swaggerUi from 'swagger-ui-express';
 import { appDataSource } from './datasource.js';
+import { swaggerSpec } from './docs/swagger.js';
 import moviesRouter from './routes/movies.js';
 import usersRouter from './routes/users.js';
 import { jsonErrorHandler } from './services/jsonErrorHandler.js';
@@ -29,6 +31,9 @@ appDataSource
 
     // Register API router
     app.use('/api', apiRouter);
+
+    // Add route for swagger
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
     // Register 404 middleware and error handler
     app.use(routeNotFoundJsonHandler); // this middleware must be registered after all routes to handle 404 correctly
