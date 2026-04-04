@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 
 import './App.css'
 import Home from './pages/Home/Home'
 import MoviePage from './pages/Movie/MoviePage'
+import { UserPage } from './pages/User/User'
 
 function App() {
   return (
@@ -11,12 +12,12 @@ function App() {
         <Link to="/" style={{ marginRight: '1rem' }}>
           Home
         </Link>
-        <Link to="/movies">Movies</Link>
       </nav>
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/movies" element={<MoviePage />} />
+        <Route path="/movies/:movieId" element={<MoviePage />} />
+        <Route path="/user" element={<UserPage />} />
       </Routes>
     </BrowserRouter>
   )
