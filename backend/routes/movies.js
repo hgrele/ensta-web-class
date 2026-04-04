@@ -4,6 +4,15 @@ import Movie from '../entities/movie.js';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api/movies:
+ *   get:
+ *     summary: Récupérer la liste des films
+ *     responses:
+ *       200:
+ *         description: Liste des films
+ */
 router.get('/', (req, res) => {
   console.log('You are requesting movies !');
   const movieRepository = appDataSource.getRepository(Movie);
@@ -12,6 +21,28 @@ router.get('/', (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /api/movies/new:
+ *   post:
+ *     summary: Ajouter un film
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               releaseDate:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Film ajouté
+ *       500:
+ *         description: Erreur serveur
+ */
 router.post('/new', (req, res) => {
   const movieRepository = appDataSource.getRepository(Movie);
   const newMovie = movieRepository.create({
