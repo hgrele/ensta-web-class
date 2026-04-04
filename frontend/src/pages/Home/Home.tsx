@@ -5,12 +5,12 @@ import { useFetchMovies } from '../../hooks/useFetchMovies'
 import './Home.css'
 
 function Home() {
-  const [movieName, setMovieName] = useState('')
+  const [searchInput, setSearchInput] = useState('')
 
   const { movies } = useFetchMovies()
 
   const filteredMovies = movies.filter(movie =>
-    movie.title.toLowerCase().includes(movieName.toLowerCase())
+    movie.title.toLowerCase().includes(searchInput.toLowerCase())
   )
 
   return (
@@ -19,8 +19,8 @@ function Home() {
         <input
           type="text"
           placeholder="Search movies..."
-          value={movieName}
-          onChange={e => setMovieName(e.target.value)}
+          value={searchInput}
+          onChange={e => setSearchInput(e.target.value)}
         />
       </div>
       <div>
@@ -30,6 +30,7 @@ function Home() {
             filteredMovies.map(movie => (
               <MovieCard
                 key={movie.id}
+                id={movie.id}
                 title={movie.title}
                 releaseDate={movie.release_date}
                 imageRef={movie.poster_path}
