@@ -8,6 +8,15 @@ const options = {
       version: '1.0.0',
       description: 'API REST pour la gestion des utilisateurs et des films',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
   apis: ['./routes/*.js'],
 };
