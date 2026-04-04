@@ -3,6 +3,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { appDataSource } from '../datasource.js';
 import User from '../entities/user.js';
+import { authMiddleware } from '../middlewares/auth.js';
 
 const router = express.Router();
 
@@ -12,6 +13,41 @@ router.get('/', function (req, res) {
     .find({})
     .then(function (users) {
       res.json({ users: users });
+    });
+});
+
+/**
+ * @swagger
+ * /api/users/me:
+ *   get:
+ *     summary: Récupérer les informations de l'utilisateur authentifié
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Informations de l'utilisateur
+ *       401:
+ *         description: Token manquant ou invalide
+ *       404:
+ *         description: Utilisateur introuvable
+ */
+router.get('/me', authMiddleware, function (req, res) {
+  appDataSource
+    .getRepository(User)
+    .findOneBy({ id: req.user.userId })
+    .then(function (user) {
+      if (!user) {
+        return res.status(404).json({ message: 'Utilisateur introuvable' });
+      }
+      res.status(200).json({
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+      });
+    })
+    .catch(function (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Erreur serveur' });
     });
 });
 
@@ -134,10 +170,12 @@ router.post('/login', function (req, res) {
             .status(401)
             .json({ message: 'Email ou mot de passe incorrect' });
         }
+        console.log(process.env.JWT_SECRET);
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
           expiresIn: '1h',
         });
-        res.status(200).json({ token });
+        res.cookie('token', token, { httpOnly: true, secure: false });
+        res.status(200).json({ message: 'Connexion réussie' });
       });
     })
     .catch(function (error) {
