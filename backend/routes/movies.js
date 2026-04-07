@@ -1,8 +1,25 @@
 import express from 'express';
 import { appDataSource } from '../datasource.js';
 import Movie from '../entities/movie.js';
+import { authenticateToken } from '../middlewares/auth.js';
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Movies
+ *     description: Movies routes
+ */
 
 const router = express.Router();
+/**
+ * @swagger
+ * /api/movies:
+ *   get:
+ *     summary: Récupérer la liste des films
+ *     responses:
+ *       200:
+ *         description: Liste des films
+ */
 
 router.get('/', function (req, res) {
   appDataSource
@@ -13,7 +30,35 @@ router.get('/', function (req, res) {
     });
 });
 
-router.post('/new', function (req, res) {
+/**
+ * @swagger
+ * /api/movies/new:
+ *   post:
+ *     summary: Ajouter un film
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               release_date:
+ *                 type: string
+ *               main_actor:
+ *                 type: string
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       201:
+ *         description: Film ajouté
+ *       500:
+ *         description: Erreur serveur
+ */
+router.post('/new', authenticateToken, function (req, res) {
   const movieRepository = appDataSource.getRepository(Movie);
   const newMovie = movieRepository.create({
     title: req.body.title,
@@ -40,7 +85,28 @@ router.post('/new', function (req, res) {
   console.log(req.body);
 });
 
-router.delete('/:movieId', function (req, res) {
+/**
+ * @swagger
+ * /api/movies/{movieId}:
+ *   delete:
+ *     summary: Delete a movie
+ *     description: Deletes a movie by its ID
+ *     parameters:
+ *       - in: path
+ *         name: movieId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the movie to delete
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       204:
+ *         description: Movie successfully deleted
+ *       500:
+ *         description: Error while deleting the movie
+ */
+router.delete('/:movieId', authenticateToken, function (req, res) {
   appDataSource
     .getRepository(Movie)
     .delete({ id: req.params.movieId })
