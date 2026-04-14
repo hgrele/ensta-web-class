@@ -15,23 +15,23 @@ const router = express.Router();
 /**
  * @swagger
  * /api/Favorites:
- * get:
- * summary: Récupérer la liste des films marqués par l'utilisateur connecté
- * security:
- * - BearerAuth: []
- * responses:
- * 200:
- * description: Liste des films
+ *   get:
+ *     summary: Récupérer la liste des films marqués par l'utilisateur connecté
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des films
  */
 router.get('/', authenticateToken, function (req, res) {
-  const currentUserId = req.user.userId;
+  const currentUserId = req.userInfo.userId;
 
   appDataSource
     .getRepository(Favorite)
     .find({
       where: {
         user: {
-          id: currentUserId,
+          user_id: currentUserId,
         },
       },
       relations: ['movie'], // get all the movies infos: does a joint
@@ -44,27 +44,28 @@ router.get('/', authenticateToken, function (req, res) {
       res.status(500).json({ message: 'Error while fetching favorites' });
     });
 });
+
 /**
  * @swagger
  * /api/Favorites/add:
- * post:
- * summary: Ajouter un film aux favorites de l'utilisateur
- * requestBody:
- * required: true
- * content:
- * application/json:
- * schema:
- * type: object
- * properties:
- * movie_id:
- * type: string
- * security:
- * - BearerAuth: []
- * responses:
- * 201:
- * description: Film ajouté
- * 500:
- * description: Erreur serveur
+ *   post:
+ *     summary: Ajouter un film aux favorites de l'utilisateur
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               movie_id:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Film ajouté
+ *       500:
+ *         description: Erreur serveur
  */
 router.post('/add', authenticateToken, function (req, res) {
   const favoriteRepository = appDataSource.getRepository(Favorite);
@@ -85,7 +86,7 @@ router.post('/add', authenticateToken, function (req, res) {
       console.error(error);
       if (error.code === '23505') {
         res.status(400).json({
-          message: `This movie is already in your favorites.`, // Fixed error message
+          message: `This movie is already in your favorites.`,
         });
       } else {
         res.status(500).json({ message: 'Error while creating the Favorite' });
@@ -96,20 +97,25 @@ router.post('/add', authenticateToken, function (req, res) {
 /**
  * @swagger
  * /api/Favorites/{movieId}:
- * delete:
- * summary: Remove a movie from favorites
- * parameters:
- * - in: path
- * name: movieId
- * required: true
- * schema:
- * type: string
- * description: ID of the Movie to unfavorite
- * security:
- * - BearerAuth: []
+ *   delete:
+ *     summary: Remove a movie from favorites
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: movieId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the Movie to unfavorite
+ *     responses:
+ *       204:
+ *         description: Deleted successfully
+ *       404:
+ *         description: Favorite not found
  */
 router.delete('/:movieId', authenticateToken, function (req, res) {
-  const currentUserId = req.user.userId;
+  const currentUserId = req.userInfo.userId;
 
   appDataSource
     .getRepository(Favorite)

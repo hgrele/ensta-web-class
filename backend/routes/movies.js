@@ -112,7 +112,7 @@ router.post('/new', authenticateToken, function (req, res) {
 router.delete('/:movieId', authenticateToken, function (req, res) {
   appDataSource
     .getRepository(Movie)
-    .delete({ id: req.params.movieId })
+    .delete({ movie_id: req.params.movieId })
     .then(function () {
       res.status(204).json({ message: 'Movie successfully deleted' });
     })

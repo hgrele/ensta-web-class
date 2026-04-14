@@ -1,6 +1,6 @@
-import { EntitySchema } from 'typeorm';
+import typeorm from 'typeorm';
 
-const Favorite = new EntitySchema({
+const Favorite = new typeorm.EntitySchema({
   name: 'Favorite',
   columns: {
     user_id: {

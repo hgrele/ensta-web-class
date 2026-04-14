@@ -4,7 +4,6 @@ import logger from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { appDataSource } from './datasource.js';
 import { swaggerSpec } from './docs/swagger.js';
-import authRouter from './routes/authentications.js';
 import favoritesRouter from './routes/favorites.js';
 import moviesRouter from './routes/movies.js';
 import usersRouter from './routes/users.js';
@@ -46,7 +45,6 @@ appDataSource
 
     apiRouter.use('/movies', moviesRouter);
     apiRouter.use('/favorites', favoritesRouter);
-    apiRouter.use('/auths', authRouter);
 
     // Register API router
 

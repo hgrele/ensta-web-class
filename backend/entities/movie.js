@@ -3,10 +3,10 @@ import typeorm from 'typeorm';
 const Movie = new typeorm.EntitySchema({
   name: 'Movie',
   columns: {
-    id: {
+    movie_id: {
       primary: true,
       generated: 'uuid',
-      type: String,
+      type: 'uuid',
     },
     title: {
       type: String,

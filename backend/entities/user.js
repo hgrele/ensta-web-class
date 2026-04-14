@@ -3,10 +3,10 @@ import typeorm from 'typeorm';
 const User = new typeorm.EntitySchema({
   name: 'User',
   columns: {
-    id: {
+    user_id: {
       primary: true,
       generated: 'uuid',
-      type: String,
+      type: 'uuid',
     },
     email: {
       type: String,
@@ -14,6 +14,8 @@ const User = new typeorm.EntitySchema({
     },
     firstname: { type: String },
     lastname: { type: String },
+    password_hash: { type: String },
+    is_admin: { type: Boolean },
   },
 
   relations: {

@@ -1,8 +1,13 @@
-import typeorm from "typeorm";
+/**
+ * @typedef {import('typeorm').MigrationInterface} MigrationInterface
+ * @typedef {import('typeorm').QueryRunner} QueryRunner
+ */
 
-const { MigrationInterface, QueryRunner } = typeorm;
-
-export class AddColunmActorTomovies1774950562658 {
+/**
+ * @class
+ * @implements {MigrationInterface}
+ */
+module.exports = class AddColunmActorTomovies1774950562658 {
     name = 'AddColunmActorTomovies1774950562658'
 
     /**
