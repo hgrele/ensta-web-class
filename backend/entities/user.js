@@ -15,6 +15,14 @@ const User = new typeorm.EntitySchema({
     firstname: { type: String },
     lastname: { type: String },
   },
+
+  relations: {
+    favorites: {
+      type: 'one-to-many',
+      target: 'Favorite',
+      inverseSide: 'user',
+    },
+  },
 });
 
 export default User;

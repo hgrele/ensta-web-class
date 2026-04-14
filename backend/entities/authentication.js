@@ -1,5 +1,6 @@
 import typeorm from 'typeorm';
 
+// done like this for migration practice
 const Authentication = new typeorm.EntitySchema({
   name: 'Authentication',
   columns: {
@@ -13,6 +14,7 @@ const Authentication = new typeorm.EntitySchema({
       unique: true,
     },
     password_hash: { type: String },
+    is_admin: { type: Boolean },
   },
 });
 

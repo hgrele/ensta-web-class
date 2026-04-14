@@ -40,6 +40,8 @@ const router = express.Router();
  *                 type: string
  *                 format: password
  *                 example: strongPassword123
+ *               is_admin:
+ *                 type: boolean
  *     responses:
  *       201:
  *         description: User created successfully
@@ -57,6 +59,7 @@ router.post('/signup', async function (req, res) {
   const newRegister = authRespository.create({
     email: req.body.email,
     password_hash: hashedPassword,
+    is_admin: req.body.is_admin,
   });
 
   authRespository
@@ -148,9 +151,13 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
+    const token = jwt.sign(
+      { userId: user.id, is_admin: user.is_admin },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '1h',
+      },
+    );
 
     res.cookie('token', token, {
       httpOnly: true,
