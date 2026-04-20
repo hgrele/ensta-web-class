@@ -60,12 +60,6 @@ export async function ensureDb() {
   if (isInitialized) {
     return;
   }
-  console.log({
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    database: process.env.DATABASE_NAME,
-    user: process.env.DATABASE_USER,
-  });
 
   await appDataSource
     .initialize()
