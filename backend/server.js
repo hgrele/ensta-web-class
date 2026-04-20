@@ -11,40 +11,65 @@ import { routeNotFoundJsonHandler } from './services/routeNotFoundJsonHandler.js
 
 const apiRouter = express.Router();
 
-appDataSource
-  .initialize()
-  .then(() => {
-    console.log('Data Source has been initialized!');
-    const app = express();
+const app = express();
 
-    app.use(logger('dev'));
-    app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: false }));
+app.use(logger('dev'));
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
-    // Register routes
-    apiRouter.get('/', (req, res) => {
-      res.send('Hello from Express!');
-    });
-    apiRouter.use('/users', usersRouter);
-    apiRouter.use('/movies', moviesRouter);
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  }),
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-    // Register API router
-    app.use('/api', apiRouter);
+app.use(async (req, res, next) => {
+  try {
+    await ensureDb();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
-    // Add route for swagger
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Register routes
+apiRouter.get('/', (req, res) => {
+  res.send('Hello from Express!');
+});
+apiRouter.use('/users', usersRouter);
+apiRouter.use('/movies', moviesRouter);
 
-    // Register 404 middleware and error handler
-    app.use(routeNotFoundJsonHandler); // this middleware must be registered after all routes to handle 404 correctly
-    app.use(jsonErrorHandler); // this error handler must be registered after all middleware to catch all errors
+// Register API router
+app.use('/', apiRouter);
 
-    const port = parseInt(process.env.PORT || '8080');
+// Add route for swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-    app.listen(port, () => {
-      console.log(`Server listening at http://localhost:${port}`);
-    });
-  })
-  .catch((err) => {
-    console.error('Error during Data Source initialization:', err);
-  });
+// Register 404 middleware and error handler
+app.use(routeNotFoundJsonHandler); // this middleware must be registered after all routes to handle 404 correctly
+app.use(jsonErrorHandler); // this error handler must be registered after all middleware to catch all errors
+
+let isInitialized = false;
+
+export async function ensureDb() {
+  if (isInitialized) {
+    return;
+  }
+  if (!isInitialized) {
+    await appDataSource
+      .initialize()
+      .then(() => console.log('Data Source has been initialized!'))
+      .catch((err) => {
+        console.error('Error during Data Source initialization:', err);
+      });
+    isInitialized = true;
+    console.log('DB initialized');
+  }
+}
+
+export default app;
