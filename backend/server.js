@@ -60,18 +60,23 @@ export async function ensureDb() {
   if (isInitialized) {
     return;
   }
-  if (!isInitialized) {
-    await appDataSource
-      .initialize()
-      .then(() => {
-        console.log('Data Source has been initialized!');
-        isInitialized = true;
-        console.log('DB initialized');
-      })
-      .catch((err) => {
-        console.error('Error during Data Source initialization:', err);
-      });
-  }
+  console.log({
+    host: process.env.DATABASE_HOST,
+    port: process.env.DATABASE_PORT,
+    database: process.env.DATABASE_NAME,
+    user: process.env.DATABASE_USER,
+  });
+
+  await appDataSource
+    .initialize()
+    .then(() => {
+      console.log('Data Source has been initialized!');
+      isInitialized = true;
+      console.log('DB initialized');
+    })
+    .catch((err) => {
+      console.error('Error during Data Source initialization:', err);
+    });
 }
 
 export default app;
