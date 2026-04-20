@@ -42,7 +42,7 @@ apiRouter.use('/users', usersRouter);
 apiRouter.use('/movies', moviesRouter);
 
 // Register API router
-app.use('/', apiRouter);
+app.use('/api', apiRouter);
 
 // Add route for swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
