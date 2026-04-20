@@ -63,12 +63,14 @@ export async function ensureDb() {
   if (!isInitialized) {
     await appDataSource
       .initialize()
-      .then(() => console.log('Data Source has been initialized!'))
+      .then(() => {
+        console.log('Data Source has been initialized!');
+        isInitialized = true;
+        console.log('DB initialized');
+      })
       .catch((err) => {
         console.error('Error during Data Source initialization:', err);
       });
-    isInitialized = true;
-    console.log('DB initialized');
   }
 }
 
