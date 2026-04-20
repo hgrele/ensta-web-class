@@ -14,10 +14,7 @@ const apiRouter = express.Router();
 const app = express();
 
 app.use(logger('dev'));
-const allowedOrigins = [
-  'http://localhost:5173',
-  process.env.FRONTEND_URL,
-].filter(Boolean);
+const allowedOrigins = [process.env.FRONTEND_URL].filter(Boolean);
 
 app.use(
   cors({
@@ -70,12 +67,6 @@ export async function ensureDb() {
     })
     .catch((err) => {
       console.error('Error during Data Source initialization:', err);
-      console.log({
-        host: process.env.DATABASE_HOST,
-        port: process.env.DATABASE_PORT,
-        database: process.env.DATABASE_NAME,
-        user: process.env.DATABASE_USER,
-      });
     });
 }
 
