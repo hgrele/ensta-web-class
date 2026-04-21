@@ -15,7 +15,7 @@ jobs:
           npm run build
       - name: Change to backend and update the list
         run: |
-          cd ../backend
+          cd backend
           npm install
           rm -rf ./public/*
           cp -r ../frontend/dist/* ./public/
