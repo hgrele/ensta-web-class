@@ -10,7 +10,7 @@ function LoginPage() {
     e.preventDefault()
 
     try {
-      const response = await fetch(`${API_URL}/auths/login`, {
+      const response = await fetch(`${API_URL}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
