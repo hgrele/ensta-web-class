@@ -11,10 +11,12 @@ jobs:
       - name: Update Frontend
         run: |
           cd frontend
+          npm install
           npm run build
       - name: Change to backend and update the list
         run: |
           cd ../backend
+          npm install
           rm -rf ./public/*
           cp -r ../frontend/dist/* ./public/
       - name: Deploy app
