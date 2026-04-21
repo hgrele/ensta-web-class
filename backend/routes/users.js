@@ -8,6 +8,7 @@ import { authMiddleware } from '../middlewares/auth.js';
 const router = express.Router();
 
 router.get('/', function (req, res) {
+  console.log('test');
   appDataSource
     .getRepository(User)
     .find({})
