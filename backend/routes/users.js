@@ -1,4 +1,6 @@
+import bcrypt from 'bcrypt';
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import { appDataSource } from '../datasource.js';
 import User from '../entities/user.js';
 import { authenticateToken } from '../middlewares/auth.js';
@@ -63,6 +65,7 @@ router.get('/', authenticateToken, function (req, res) {
  *               - email
  *               - firstname
  *               - lastname
+ *               - password
  *             properties:
  *               email:
  *                 type: string
@@ -73,6 +76,9 @@ router.get('/', authenticateToken, function (req, res) {
  *               lastname:
  *                 type: string
  *                 example: Doe
+ *               password:
+ *                 type: string
+ *                 example: password
  *     security:
  *       - BearerAuth: []
  *     responses:
@@ -83,12 +89,16 @@ router.get('/', authenticateToken, function (req, res) {
  *       500:
  *         description: Server error
  */
-router.post('/new', authenticateToken, function (req, res) {
+router.post('/new', async function (req, res) {
   const userRepository = appDataSource.getRepository(User);
+
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const newUser = userRepository.create({
     email: req.body.email,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
+    password_hash: hashedPassword,
+    is_admin: false,
   });
 
   userRepository
@@ -106,6 +116,101 @@ router.post('/new', authenticateToken, function (req, res) {
         res.status(500).json({ message: 'Error while creating the user' });
       }
     });
+});
+
+/**
+ * @swagger
+ * /api/users/login:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Login a user
+ *     description: Authenticates a user and returns a JWT token.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: strongPassword123
+ *     responses:
+ *       200:
+ *         description: Login successful, returns JWT token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Missing email or password
+ *       401:
+ *         description: Invalid credentials
+ *       500:
+ *         description: Server error during login
+ */
+
+router.post('/login', async (req, res) => {
+  try {
+    const userRepository = appDataSource.getRepository(User);
+
+    if (!req.body.email || !req.body.password) {
+      return res.status(400).json({ error: 'Email and password required' });
+    }
+
+    const user = await userRepository.findOneBy({
+      email: req.body.email,
+    });
+
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      req.body.password,
+      user.password_hash,
+    );
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign(
+      { userId: user.user_id, is_admin: user.is_admin },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '1h',
+      },
+    );
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    });
+
+    res.status(200).json({
+      message: 'Login successful',
+      token: token,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error during login' });
+  }
 });
 
 /**
@@ -134,7 +239,7 @@ router.post('/new', authenticateToken, function (req, res) {
 router.delete('/:userId', authenticateToken, function (req, res) {
   appDataSource
     .getRepository(User)
-    .delete({ id: req.params.userId })
+    .delete({ user_id: req.params.userId })
     .then(function () {
       res.status(204).json({ message: 'User successfully deleted' });
     })

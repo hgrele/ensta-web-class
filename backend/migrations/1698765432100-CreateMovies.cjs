@@ -1,8 +1,13 @@
-import typeorm from "typeorm";
+/**
+ * @typedef {import('typeorm').MigrationInterface} MigrationInterface
+ * @typedef {import('typeorm').QueryRunner} QueryRunner
+ */
 
-const { MigrationInterface, QueryRunner } = typeorm;
-
-export class CreateMovies1698765432100 {
+/**
+ * @class
+ * @implements {MigrationInterface}
+ */
+module.exports = class CreateMovies1698765432100 {
     name = 'CreateMovies1698765432100'
 
     async up(queryRunner) {

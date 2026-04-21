@@ -50,6 +50,8 @@ router.get('/', function (req, res) {
  *                 type: string
  *               main_actor:
  *                 type: string
+ *               image_link:
+ *                 type: string
  *     security:
  *       - BearerAuth: []
  *     responses:
@@ -65,6 +67,7 @@ router.post('/new', authenticateToken, function (req, res) {
     description: req.body.description,
     release_date: req.body.release_date,
     main_actor: req.body.main_actor,
+    image_link: req.body.image_link,
   });
 
   movieRepository
@@ -109,7 +112,7 @@ router.post('/new', authenticateToken, function (req, res) {
 router.delete('/:movieId', authenticateToken, function (req, res) {
   appDataSource
     .getRepository(Movie)
-    .delete({ id: req.params.movieId })
+    .delete({ movie_id: req.params.movieId })
     .then(function () {
       res.status(204).json({ message: 'Movie successfully deleted' });
     })
