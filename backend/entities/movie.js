@@ -21,9 +21,9 @@ const Movie = new typeorm.EntitySchema({
     image_link: { type: String },
   },
   relations: {
-    favorites: {
+    hateds: {
       type: 'one-to-many',
-      target: 'Favorite',
+      target: 'Hated',
       inverseSide: 'movie',
     },
   },

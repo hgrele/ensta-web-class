@@ -19,9 +19,9 @@ const User = new typeorm.EntitySchema({
   },
 
   relations: {
-    favorites: {
+    hateds: {
       type: 'one-to-many',
-      target: 'Favorite',
+      target: 'Hated',
       inverseSide: 'user',
     },
   },

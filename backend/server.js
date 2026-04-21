@@ -4,7 +4,7 @@ import logger from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { appDataSource } from './datasource.js';
 import { swaggerSpec } from './docs/swagger.js';
-import favoritesRouter from './routes/favorites.js';
+import hatedsRouter from './routes/hateds.js';
 import moviesRouter from './routes/movies.js';
 import usersRouter from './routes/users.js';
 import { jsonErrorHandler } from './services/jsonErrorHandler.js';
@@ -38,7 +38,7 @@ apiRouter.get('/', (req, res) => {
 });
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/movies', moviesRouter);
-apiRouter.use('/favorites', favoritesRouter);
+apiRouter.use('/hateds', hatedsRouter);
 app.use('/api', apiRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(routeNotFoundJsonHandler); // this middleware must be registered after all routes to handle 404 correctly

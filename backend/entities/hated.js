@@ -1,7 +1,7 @@
 import typeorm from 'typeorm';
 
-const Favorite = new typeorm.EntitySchema({
-  name: 'Favorite',
+const Hated = new typeorm.EntitySchema({
+  name: 'Hated',
   columns: {
     user_id: {
       type: 'uuid', // Use String if your User ID is a standard string
@@ -28,4 +28,4 @@ const Favorite = new typeorm.EntitySchema({
   },
 });
 
-export default Favorite;
+export default Hated;
