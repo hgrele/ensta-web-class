@@ -1,0 +1,28 @@
+.choosen-movie-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+  background: #f5f7fa;
+}
+
+.choosen-movie-card {
+  width: min(560px, 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.choosen-movie-card h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.75rem;
+  color: #1f2937;
+}
+
+.choosen-movie-card p {
+  margin: 0;
+  color: #4b5563;
+}

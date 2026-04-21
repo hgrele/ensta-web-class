@@ -1,25 +1,30 @@
+import { useMemo, useState } from 'react'
 import './Home.css'
-import { useEffect, useState } from 'react'
 
 import reactLogo from '../../assets/react.svg'
 import { MovieCard } from '../../components/movie-card'
-import axios from 'axios'
+import { useFetchMovies } from '../../hooks/useFetchMovies'
 
-const API_KEY = import.meta.env.VITE_API_KEY
+interface MovieInterface {
+  id: number
+  title: string
+  poster_path: string
+  overview?: string
+  release_date?: string
+  [key: string]: unknown
+}
 
 function Home() {
-  const [count, setCount] = useState(0)
-  const [movies, setMovies] = useState([])
-  useEffect(() => {
-    console.log('UseEffect')
-    axios
-      .get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}`)
-      .then(response => {
-        setMovies(
-          response.data.results.map((movieObjet: any) => movieObjet.title)
-        )
-      })
-  }, [])
+  const [searchInput, setSearchInput] = useState('')
+  // when loading page the movies are loaded
+  const { movies: fetchedMovies = [] } = useFetchMovies()
+  const movies = useMemo(() => fetchedMovies, [fetchedMovies])
+
+  const filterMovies = (movies: MovieInterface[]) => {
+    return movies.filter(movie =>
+      movie.title.toLowerCase().includes(searchInput.toLowerCase())
+    )
+  }
 
   return (
     <>
@@ -28,15 +33,24 @@ function Home() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>My movies</h1>
+      <h1>Popular Movies</h1>
       <div className="card">
-        <input type="text" placeholder="Search movies..." />
-        <button onClick={() => setCount(count => count + 1)}>
-          count is {count}
-        </button>
+        <input
+          type="text"
+          placeholder="Search movies..."
+          value={searchInput}
+          onChange={e => setSearchInput(e.target.value)}
+        />
       </div>
-      {movies.map(title => (
-        <MovieCard title={title} />
+      {filterMovies(movies).map((movie: MovieInterface) => (
+        <MovieCard
+          key={movie.id}
+          id={movie.id}
+          title={movie.title}
+          image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+          overview={movie.overview}
+          release_date={movie.release_date}
+        />
       ))}
     </>
   )
