@@ -9,10 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Update Frontend
-        run: cd frontend
+        run: 
+          cd frontend
           npm run build
       - name: Change to backend and update the list
-        run: cd ../backend
+        run: 
+          cd ../backend
           rm -rf ./public/*
           cp -r ../frontend/dist/* ./public/
           cd ..
