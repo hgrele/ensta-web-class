@@ -1,0 +1,21 @@
+name: Commit and update the deploy
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  Deploy-Production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update Frontend
+        run: cd frontend
+          npm install
+          npm run build
+      - name: Change to backend and update the list
+        run: cd ../backend
+          npm install
+          rm -rf ./public/*
+          cp -r ../frontend/dist/* ./public/
+      - name: Deploy app
+        run: vercel deploy --target=developpement
