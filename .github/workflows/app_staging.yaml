@@ -20,5 +20,3 @@ jobs:
           rm -rf ./public/*
           cp -r ../frontend/dist/* ./public/
           cd ..
-      - name: Deploy app
-        run: vercel deploy --target=preview

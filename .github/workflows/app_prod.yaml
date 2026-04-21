@@ -19,5 +19,3 @@ jobs:
           npm install
           rm -rf ./public/*
           cp -r ../frontend/dist/* ./public/
-      - name: Deploy app
-        run: vercel deploy --prebuilt --prod
