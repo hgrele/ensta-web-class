@@ -48,8 +48,8 @@ router.get('/', function (req, res) {
  *                 type: string
  *               release_date:
  *                 type: string
- *               main_actor:
- *                 type: string
+ *               rating:
+ *                 type: number
  *               image_link:
  *                 type: string
  *     security:
@@ -66,7 +66,7 @@ router.post('/new', authenticateToken, function (req, res) {
     title: req.body.title,
     description: req.body.description,
     release_date: req.body.release_date,
-    main_actor: req.body.main_actor,
+    rating: req.body.rating,
     image_link: req.body.image_link,
   });
 

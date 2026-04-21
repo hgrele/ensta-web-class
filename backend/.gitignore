@@ -5,3 +5,5 @@ node_modules
 .env
 .vercel
 .env*.local
+*.pem
+connect_to_db.sh

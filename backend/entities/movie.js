@@ -13,7 +13,10 @@ const Movie = new typeorm.EntitySchema({
       unique: true,
     },
     release_date: { type: Date },
-    main_actor: { type: String },
+    rating: {
+      type: 'float',
+      nullable: true,
+    },
     description: { type: String },
     image_link: { type: String },
   },
