@@ -39,7 +39,7 @@ apiRouter.get('/', (req, res) => {
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/movies', moviesRouter);
 apiRouter.use('/favorites', favoritesRouter);
-app.use('/api', apiRouter);
+app.use('/', apiRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(routeNotFoundJsonHandler); // this middleware must be registered after all routes to handle 404 correctly
 app.use(jsonErrorHandler); // this error handler must be registered after all middleware to catch all errors
