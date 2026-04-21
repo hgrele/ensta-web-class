@@ -4,7 +4,7 @@ on:
     branches:
       - staging
 jobs:
-  Deploy-Production:
+  Deploy-Staging:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
