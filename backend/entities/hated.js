@@ -4,11 +4,11 @@ const Hated = new typeorm.EntitySchema({
   name: 'Hated',
   columns: {
     user_id: {
-      type: 'uuid', // Use String if your User ID is a standard string
+      type: 'uuid',
       primary: true,
     },
     movie_id: {
-      type: 'uuid', // Use String if your Movie ID is a standard string
+      type: 'uuid',
       primary: true,
     },
   },
